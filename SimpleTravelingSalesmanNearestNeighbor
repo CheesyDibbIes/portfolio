@@ -1,0 +1,105 @@
+package travel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class Main {
+
+	static double totalDistance = 0;
+	
+	public static void main(String[] args) {
+		run(10);
+		
+		totalDistance = 0;
+		List<Node> test = new ArrayList<>();
+		test.add(new Node(0, 0));
+		test.add(new Node(0, 3));
+		test.add(new Node(4, 3));
+		test.add(new Node(4, 0));
+		findTotalDistance(test);
+		printNodeInfo(test);
+	}
+
+	private static void run(int length) {
+		List<Node> nodes = new ArrayList<>();
+		addNodes(nodes, length);
+		findTotalDistance(nodes);
+		printNodeInfo(nodes);
+	}
+
+	public static void printNodeInfo(List<Node> nodes) {
+		for(Node n : nodes) {
+			System.out.printf("Node: (%d,%d)%n", n.x, n.y);
+		}
+		System.out.println("Total Distance: " + Math.round(totalDistance) +"\n");
+	}
+	
+	private static void findTotalDistance(List<Node> nodes) {
+		Node currentNode = nodes.get(0);
+		currentNode.beenVisited = true;
+		
+		int i = 0;
+		while(i < nodes.size()) {
+			Node nextNode = findNextNode(nodes, currentNode);
+			if(nextNode == null) break;
+			totalDistance += distanceFormula(currentNode, nextNode);
+			currentNode = nextNode;
+			currentNode.beenVisited = true;
+			i++;
+		}
+		totalDistance += distanceFormula(currentNode, nodes.get(0));
+	}
+	
+	public static Node findNextNode(List<Node> nodes, Node currentNode) {
+		double min = Double.MAX_VALUE;
+		Node closest = null;
+		
+		for(Node node : nodes) {
+			if(!node.beenVisited) {
+				double distance = distanceFormula(currentNode, node);
+				if(min > distance) {
+					min = distance;
+					closest = node;
+				}
+			}
+		}
+		return closest;
+	}
+	
+	public static void addNodes(List<Node> nodes, int length) {
+		for(int i = 0; i < length; i++) {
+			nodes.add(new Node());
+		}
+	}
+
+	public static double distanceFormula(Node n1, Node n2) {
+		int term1 = n1.x - n2.x;
+		int term2 = n1.y - n2.y;
+		return Math.sqrt(term1 * term1 + term2 * term2);
+
+	}
+}
+
+class Node {
+
+	public int x;
+	public int y;
+	public boolean beenVisited;
+	
+	Random ran = new Random();
+	
+	public Node(int x, int y) {
+		this.beenVisited = false;
+		this.x = x;
+		this.y = y;
+	}
+	
+	public Node()	{
+		this.x = ran.nextInt(201) - 100;  // Range: -100 to 100
+        this.y = ran.nextInt(201) - 100;
+		this.beenVisited = false;
+	}
+	
+}
+
