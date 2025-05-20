@@ -97,7 +97,7 @@ class Node {
 	
 	public Node()	{
 		this.x = ran.nextInt(201) - 100;  // Range: -100 to 100
-        this.y = ran.nextInt(201) - 100;
+                this.y = ran.nextInt(201) - 100;
 		this.beenVisited = false;
 	}
 	
